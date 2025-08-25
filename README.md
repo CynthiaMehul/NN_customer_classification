@@ -14,7 +14,7 @@ You are required to help the manager to predict the right group of the new custo
 
 ## Neural Network Model
 
-
+<img width="1002" height="817" alt="image" src="https://github.com/user-attachments/assets/08836fbd-3598-4a8d-a31b-892329c5d97a" />
 
 ## DESIGN STEPS
 
@@ -35,9 +35,9 @@ Build the neural network model, train it with CrossEntropyLoss and Adam optimize
 class NeuralNetwork(torch.nn.Module):
     def __init__(self, size):
         super().__init__()
-        self.fc1 = torch.nn.Linear(size, 16)
-        self.fc2 = torch.nn.Linear(16, 8)
-        self.fc3 = torch.nn.Linear(8, 4)
+        self.fc1 = torch.nn.Linear(size, 32)
+        self.fc2 = torch.nn.Linear(32, 16)
+        self.fc3 = torch.nn.Linear(16, 4)
         self.relu = torch.nn.ReLU()
 
     def forward(self, x):
@@ -53,19 +53,18 @@ loss_fn=torch.nn.CrossEntropyLoss()
 optimizer=torch.optim.Adam(cynthia_brain.parameters(),lr=0.001)
 ```
 ```python
-def train_model(model, train_loader, loss_fn, optimizer, epochs=50):
-    model.train()
+def train_model(model, train_loader, criterion, optimizer, epochs=100):
     for epoch in range(epochs):
-        for x_batch, y_batch in train_loader:
-            outputs = model(x_batch)
-            loss = loss_fn(outputs, y_batch)
-
+        model.train()
+        for X_batch, y_batch in train_loader:
             optimizer.zero_grad()
+            outputs = model(X_batch)
+            loss = criterion(outputs, y_batch)
             loss.backward()
             optimizer.step()
 
-        if (epoch + 1) % 10 == 0:
-            print(f"Epoch [{epoch+1}/{epochs}], Loss: {loss.item():.6f}")
+        if (epoch+1) % 10 == 0:
+            print(f"Epoch [{epoch+1}/{epochs}], Loss: {loss.item():.4f}")
 ```
 
 ## Dataset Information
